@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* ───────────── Design tokens ───────────── */
+@theme {
+  /* Wine / maroon — the base of the brand */
+  --color-ink: #0d0608;
+  --color-wine-950: #160910;
+  --color-wine-900: #220c16;
+  --color-wine-800: #3a1222;
+  --color-wine-700: #5a1830;
+  --color-wine-600: #7d2140;
+  --color-wine-500: #a12d52;
+
+  /* Antique gold — accents, zari */
+  --color-gold-200: #f1e3c0;
+  --color-gold-300: #e6cf96;
+  --color-gold-400: #d6b36c;
+  --color-gold-500: #c09a4c;
+  --color-gold-600: #9c7a36;
+  --color-gold-700: #6f5626;
+
+  /* Ivory — text and light surfaces */
+  --color-ivory-50: #fdfaf4;
+  --color-ivory-100: #f7f0e3;
+  --color-ivory-200: #ece0c9;
+  --color-ivory-300: #d9c9aa;
+
+  /* Supporting jewel tones (for product colors) */
+  --color-emerald-deep: #0f4a3c;
+  --color-peacock: #0e5468;
+  --color-marigold: #e39a2d;
+  --color-rani: #c2186b;
+
+  --font-display: var(--font-cormorant), "Times New Roman", serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-drape: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-shimmer: shimmer 3.5s var(--ease-drape) infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 50%; }
+    100% { background-position: -200% 50%; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+}
+
+/* ───────────── Base ───────────── */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html {
+    background: var(--color-ink);
+  }
+  body {
+    background: var(--color-ink);
+    color: var(--color-ivory-100);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-gold-400);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 1.5px solid var(--color-gold-400);
+    outline-offset: 3px;
+  }
+  /* Thin gold scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-wine-700) transparent;
+  }
+}
+
+/* ───────────── Utilities ───────────── */
+@utility text-gold-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-gold-600) 0%,
+    var(--color-gold-200) 35%,
+    var(--color-gold-400) 55%,
+    var(--color-gold-600) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility gold-hairline {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold-500),
+    transparent
+  );
+  height: 1px;
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-gold-400);
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--color-wine-950) 70%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* Film-grain overlay for a tactile, premium feel */
+@utility grain {
+  &::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Hide native cursor only when the custom cursor is active */
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
